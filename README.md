@@ -17,7 +17,7 @@ In most of the below cases, there will be a web interface running at http://loca
 Running with a warrior
 -------------------------
 
-Follow the [instructions on the ArchiveTeam wiki](http://archiveteam.org/index.php?title=Warrior) for installing the Warrior, and select the "tumblr-grab" project in the Warrior interface.
+Follow the [instructions on the ArchiveTeam wiki](http://archiveteam.org/index.php?title=Warrior) for installing the Warrior, and select the "tumblr2-grab" project in the Warrior interface.
 
 Running without a warrior
 -------------------------
@@ -60,8 +60,8 @@ Distribution-specific setup
     adduser --system --group --shell /bin/bash archiveteam
     apt-get update && apt-get install -y git-core libgnutls-dev lua5.1 liblua5.1-0 liblua5.1-0-dev screen python-dev python-pip bzip2 zlib1g-dev flex autoconf
     pip install --upgrade seesaw
-    su -c "cd /home/archiveteam; git clone https://github.com/ArchiveTeam/tumblr-grab.git; cd tumblr-grab; ./get-wget-lua.sh" archiveteam
-    screen su -c "cd /home/archiveteam/tumblr-grab/; run-pipeline pipeline.py --concurrent 2 --address '127.0.0.1' YOURNICKHERE" archiveteam
+    su -c "cd /home/archiveteam; git clone https://github.com/ArchiveTeam/tumblr2-grab.git; cd tumblr2-grab; ./get-wget-lua.sh" archiveteam
+    screen su -c "cd /home/archiveteam/tumblr2-grab/; run-pipeline pipeline.py --concurrent 2 --address '127.0.0.1' YOURNICKHERE" archiveteam
     [... ctrl+A D to detach ...]
 
 In __Debian Jessie__, the `libgnutls-dev` package was renamed to `libgnutls28-dev`. So, you need to do the following instead:
@@ -94,7 +94,7 @@ You need Homebrew. Ensure that you have the OS X equivalent of bzip2 installed a
     pip install --upgrade seesaw
     [... pretty much the same as above ...]
 
-**There is a known issue with some packaged versions of rsync. If you get errors during the upload stage, `tumblr-grab` will not work with your rsync version.**
+**There is a known issue with some packaged versions of rsync. If you get errors during the upload stage, `tumblr2-grab` will not work with your rsync version.**
 
 This supposedly fixes it:
 
@@ -116,8 +116,8 @@ Ensure that you have the Arch equivalent of bzip2 installed as well.
     apk add lua5.1 git python-dev bzip2 bash rsync gcc libc-dev lua5.1-dev gnutls-dev autoconf flex make
     python -m ensurepip
     pip install -U seesaw
-    git clone https://github.com/ArchiveTeam/tumblr-grab
-    cd tumblr-grab; ./get-wget-lua.sh
+    git clone https://github.com/ArchiveTeam/tumblr2-grab
+    cd tumblr2-grab; ./get-wget-lua.sh
     run-pipeline pipeline.py --concurrent 2 --address '127.0.0.1' YOURNICKHERE
 
 ### For FreeBSD:

@@ -262,15 +262,20 @@ wget.callbacks.get_urls = function(file, url, is_css, iri)
       check(url ..  "?is_related_post=1")
       check(url ..  "/embed")
       check(url ..  "/amp")
+      check("https://www.tumblr.com/oembed/1.0?url=" .. url)
     end
 
     if string.match(url, "^https?://[^%.]+%.tumblr%.com/post/[0-9]+/[^/]+/embed$") then
       local embed_key = string.match(html, "&quot;embed_key&quot;:&quot;([^&]+)&quot;")
+      local embed_did = string.match(html, "&quot;embed_did&quot;:&quot;([^&]+)&quot;")
       local post_id = string.match(url, "^https?://[^/]+/post/([0-9]+)")
       local blogname = string.match(url, "^https?://([^%.]+)%.tumblr%.com")
       if embed_key ~= nil then
         check("https://embed.tumblr.com/embed/post/" .. embed_key .. "/" .. post_id)
         check("https://www.tumblr.com/embed/clickthrough/" .. embed_key .. "/" .. post_id .. "/tumblelog?url=https%3A%2F%2F" .. blogname .. ".tumblr.com%2F")
+        if embed_did ~= nil then
+          check("https://embed.tumblr.com/embed/post/" .. embed_key .. "/" .. post_id .. "?width=542&language=en_US&did=" .. embed_did)
+        end
       end
     end
 
