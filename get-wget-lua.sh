@@ -36,7 +36,7 @@ else
   exit 1
 fi
 
-if [ ! -d "/usr/include/lua5.1" && -d "/usr/include/lua-5.1" ]; 
+if [[ ! -d "/usr/include/lua5.1" && -d "/usr/include/lua-5.1" ]]
 then
   echo
   echo "###################################################################"
