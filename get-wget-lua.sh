@@ -49,6 +49,11 @@ fi
 
 if ./bootstrap && ./configure $CONFIGURE_SSL_OPT --disable-nls && make && src/wget -V | grep -q lua
 then
+  cd tests
+  sed -i  -e  's%/{{port}}%/\\{\\{port\\}\\}%g' FTPServer.pm FTPTest.pm HTTPServer.pm HTTPTest.pm Test-proxied-https-auth.px
+  make check
+  cd ..
+
   cp src/wget ../wget-lua
   cd ../
   echo
