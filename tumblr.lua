@@ -83,9 +83,7 @@ allowed = function(url, parenturl)
   if string.match(url, "^https?://[a-z0-9]+%.media%.tumblr%.com")
       or string.match(url, "^https?://static%.tumblr%.com")
       or string.match(url, "^https?://assets%.tumblr%.com")
-      or string.match(url, "^https?://vtt%.tumblr%.com")
-      or string.match(url, "^https?://vt%.tumblr%.com")
-      or string.match(url, "^https?://v%.tumblr%.com") then
+      or string.match(url, "^https?://vt?t?%.tumblr%.com") then
     discovered_media[url] = true
     return false
   end
@@ -131,7 +129,6 @@ allowed = function(url, parenturl)
   if string.match(url, "^https?://[^%.]+%.tumblr%.com") then
     if string.match(url, "^https?://www%.tumblr%.com/video/")
         or string.match(url, "^https?://[^%.]+%.tumblr%.com/video_file/")
-        or string.match(url, "^https?://[^%.]+%.tumblr%.com/video_file/")
         or string.match(url, "^https?://www%.tumblr%.com/embed/clickthrough/")
         or string.match(url, "^https?://embed%.tumblr%.com/embed/") then
       return true
@@ -167,9 +164,7 @@ wget.callbacks.download_child_p = function(urlpos, parent, depth, start_url_pars
   if string.match(url, "^https?://[a-z0-9]+%.media%.tumblr%.com")
       or string.match(url, "^https?://static%.tumblr%.com")
       or string.match(url, "^https?://assets%.tumblr%.com")
-      or string.match(url, "^https?://vtt%.tumblr%.com")
-      or string.match(url, "^https?://vt%.tumblr%.com")
-      or string.match(url, "^https?://v%.tumblr%.com") then
+      or string.match(url, "^https?://vt?t?%.tumblr%.com") then
     discovered_media[url] = true
     return false
   end
@@ -243,11 +238,7 @@ wget.callbacks.get_urls = function(file, url, is_css, iri)
     end
   end
 
-  if (not (string.match(url, "^https?://[0-9a-z]+%.media%.tumblr%.com")
-          or string.match(url, "^https?://vtt%.tumblr%.com")
-          or string.match(url, "^https?://ve%.media%.tumblr%.com"))
-      and allowed(url, nil))
-      or initial then
+  if allowed(url, nil) or initial then
     html = read_file(file)
     initial = false
 
