@@ -47,7 +47,7 @@ then
   sed -i 's%lua5.1%lua-5.1%g' configure.ac
 fi
 
-if autoconf && ./configure $CONFIGURE_SSL_OPT --disable-nls && make && src/wget -V | grep -q lua
+if ./bootstrap && ./configure $CONFIGURE_SSL_OPT --disable-nls && make && src/wget -V | grep -q lua
 then
   cp src/wget ../wget-lua
   cd ../
