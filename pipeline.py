@@ -62,7 +62,7 @@ if not WGET_LUA:
 # Update this each time you make a non-cosmetic change.
 # It will be added to the WARC files and reported to the tracker.
 
-VERSION = '20181224.01'
+VERSION = '20181224.02'
 TRACKER_ID = 'tumblr2'
 TRACKER_HOST = 'tracker.archiveteam.org'
 
@@ -286,8 +286,14 @@ class WgetArgs(object):
         item['item_value'] = item_value
 
         http_client = httpclient.HTTPClient()
-        r = http_client.fetch('https://{}.tumblr.com/'.format(item_value.split(':')[0]),
-                              method='GET')
+        r = http_client.fetch(
+            'https://{}.tumblr.com/'.format(item_value.split(':')[0]),
+            method='GET',
+            headers={
+                'User-Agent': item['useragent'],
+                'Cookie': ('pfg=' + item['pfg']) if 'pfg' in item else ''
+            }
+        )
         protocol = r.effective_url.split(':', 1)[0]
 
         if item_type == 'posts':
@@ -305,7 +311,7 @@ class WgetArgs(object):
             wget_args.append('{}://{}.tumblr.com/?amp_see_more=1'.format(protocol, item_value))
         elif item_type == 'tags':
             blog, name = item_value.split(':', 1)
-            r = http_client.fetch('https://pastebin.com/raw/auU2xVgm', method='GET')
+            r = http_client.fetch('TODO', method='GET')
             if r.code != 200:
                 raise Exception('Could not get URLs list from github.')
             for tag in r.body.decode('utf-8', 'ignore').splitlines():
