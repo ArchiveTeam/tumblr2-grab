@@ -62,7 +62,7 @@ if not WGET_LUA:
 # Update this each time you make a non-cosmetic change.
 # It will be added to the WARC files and reported to the tracker.
 
-VERSION = '20181224.04'
+VERSION = '20190102.01'
 TRACKER_ID = 'tumblr2'
 TRACKER_HOST = 'tracker.archiveteam.org'
 
@@ -134,7 +134,7 @@ class GetUAandPFG(SimpleTask):
                             (r.headers['location'] == '/' 
                              or r.headers['location'] == 'https://staff.tumblr.com/'):
                         item.log_output('No PFG/GDPR cookie needed')
-                        item['pfg'] = None
+                        item['useragent'] = temp_useragent
                         self._reuses = 0
                         return None
                     else:
@@ -251,7 +251,6 @@ def stats_id_function(item):
 
 class WgetArgs(object):
     def realize(self, item):
-        item.log_output('Using user agent %(useragent)s and PFG token %(pfg)s.' % item)
         wget_args = [
             WGET_LUA,
             '-U', ItemInterpolation('%(useragent)s'),
@@ -277,6 +276,7 @@ class WgetArgs(object):
             '--warc-header', ItemInterpolation('tumblr-blog: %(item_name)s')
         ]
         if 'pfg' in item:
+            item.log_output('Using user agent %(useragent)s and PFG token %(pfg)s.' % item)
             wget_args.extend(['--header', ItemInterpolation('Cookie: pfg=%(pfg)s')])
 
         item_name = item['item_name']
