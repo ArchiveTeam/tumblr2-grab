@@ -36,41 +36,43 @@ else
   exit 1
 fi
 
-if autoconf && ./configure $CONFIGURE_SSL_OPT --disable-nls && make && src/wget -V | grep -q lua
+if [[ ! -d "/usr/include/lua5.1" && -d "/usr/include/lua-5.1" ]]
 then
-  cp src/wget ../wget-lua
-  cd ../
-  echo
   echo
   echo "###################################################################"
   echo
-  echo "wget-lua successfully built."
+  echo "lua libs found in alternate location"
+  echo "Applying Patch"
   echo
-  ./wget-lua --help | grep -iE "gnu|warc|lua"
-  rm -rf get-wget-lua.tmp
-  exit 0
-fi
-echo
-echo "wget-lua not successfully built."
-echo "attempting patch for RedHat"
-echo
-sed -i 's%lua5.1%lua-5.1%g' configure.ac
-if autoconf && ./configure $CONFIGURE_SSL_OPT --disable-nls && make && src/wget -V | grep -q lua
-then
-  cp src/wget ../wget-lua
-  cd ../
-  echo
-  echo
-  echo "###################################################################"
-  echo
-  echo "wget-lua successfully built."
-  echo
-  ./wget-lua --help | grep -iE "gnu|warc|lua"
-  rm -rf get-wget-lua.tmp
-  exit 0
+  sed -i 's%lua5.1%lua-5.1%g' configure.ac
 fi
 
-echo
-echo "wget-lua not successfully built."
-echo
-exit 1
+if ./bootstrap && ./configure $CONFIGURE_SSL_OPT --disable-nls && make && src/wget -V | grep -q lua
+then
+  cd tests
+  sed -i  -e  's%/{{port}}%/\\{\\{port\\}\\}%g' FTPServer.pm FTPTest.pm HTTPServer.pm HTTPTest.pm Test-proxied-https-auth.px
+  make check
+  cd ..
+
+  cp src/wget ../wget-lua
+  cd ../
+  echo
+  echo
+  echo "###################################################################"
+  echo
+  echo "wget-lua successfully built."
+  echo
+  ./wget-lua --help | grep -iE "gnu|warc|lua"
+  rm -rf get-wget-lua.tmp
+  exit 0
+else
+  echo
+  echo
+  echo "###################################################################"
+  echo
+  echo "wget-lua not successfully built."
+  echo
+  exit 1
+fi
+
+exit 2
